@@ -4,7 +4,7 @@ import { Button, ButtonProps } from '../ui/button';
 import Link, { type LinkProps } from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Menu } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 type NavItemProps = { variant: ButtonProps['variant'] } & LinkProps;
 
@@ -37,7 +37,7 @@ export const NavBar: FC = () => {
     >
       <div className="flex w-fit mb-6 items-center gap-4">
         <Button className="md:hidden" onClick={toggleMenu}>
-          <Menu width="w-4" />
+          {showMenu ? <X width="w-4" /> : <Menu width="w-4" />}
         </Button>
         <h3>Navegação</h3>
       </div>
