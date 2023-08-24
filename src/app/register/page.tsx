@@ -1,2 +1,6 @@
-'use client';
-export { Form as default } from '@/components/Form';
+import { Form } from '@/components/Form';
+import { NextPage } from 'next';
+
+const Register: NextPage = () => <Form />;
+
+export default Register;
