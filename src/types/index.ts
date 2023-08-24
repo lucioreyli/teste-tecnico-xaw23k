@@ -7,9 +7,7 @@ export const productSchema = z
         required_error: 'Campo necessário',
         invalid_type_error: 'Tipo informado inválido',
       })
-      .nonempty({
-        message: 'Campo necessário',
-      }),
+      .nonempty({ message: 'Campo necessário' }),
     unit: z.enum(['lt', 'kg', 'un'], {
       required_error: 'Campo necessário',
       invalid_type_error: "Tipo inválido, apenas 'lt', kg' o un'",
@@ -23,23 +21,18 @@ export const productSchema = z
       .refine(
         (value) => {
           if (!value) return true;
-
           const validator = z.number().int();
           const num = value.replaceAll(/\D/g, '');
           return validator.safeParse(Number(num)).success;
         },
-        {
-          message: 'Quantidade inválida',
-        },
+        { message: 'Quantidade inválida' },
       ),
     price: z
       .string({
         required_error: 'Campo necessário',
         invalid_type_error: 'Tipo informado inválido',
       })
-      .nonempty({
-        message: 'Campo necessário',
-      })
+      .nonempty({ message: 'Campo necessário' })
       .refine((value: string) => {
         const validator = z.number().int();
         const num = value.replaceAll(/\D/g, '');
@@ -56,7 +49,6 @@ export const productSchema = z
   })
   .refine(
     (data) => {
-      console.log(data);
       if (!data.perishable) {
         return true;
       }
@@ -102,54 +94,3 @@ export const productSchema = z
   );
 
 export type Product = z.infer<typeof productSchema>;
-
-export const data: Product[] = [
-  {
-    name: 'peixe',
-    unit: 'kg',
-    quantity: '300',
-    fabricationDate: '2003-07-08T03:04:05',
-    perishable: true,
-    validationDate: '2003-07-08T23:10:58',
-  },
-  {
-    name: 'peixe',
-    unit: 'kg',
-    quantity: '300',
-    fabricationDate: '2003-07-08T03:04:05',
-    perishable: false,
-    validationDate: '2003-07-08T23:10:58',
-  },
-  {
-    name: 'peixe',
-    unit: 'kg',
-    quantity: '300',
-    fabricationDate: '2003-07-08T03:04:05',
-    perishable: true,
-    validationDate: '2003-07-08T23:10:58',
-  },
-  {
-    name: 'peixe',
-    unit: 'kg',
-    quantity: '300',
-    fabricationDate: '2003-07-08T03:04:05',
-    perishable: false,
-    validationDate: '2003-07-08T23:10:58',
-  },
-  {
-    name: 'peixe',
-    unit: 'kg',
-    quantity: '300',
-    fabricationDate: '2003-07-08T03:04:05',
-    perishable: false,
-    validationDate: '2003-07-08T23:10:58',
-  },
-  {
-    name: 'peixe',
-    unit: 'kg',
-    quantity: '300',
-    fabricationDate: '2003-07-08T03:04:05',
-    perishable: false,
-    validationDate: '2003-07-08T23:10:58',
-  },
-].map((i) => ({ ...i, price: 'R$ 500' }) as Product);
