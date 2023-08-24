@@ -34,7 +34,14 @@ export const NavBar: FC = () => {
     >
       <div className="flex w-fit mb-6 items-center gap-4">
         <Button className="md:hidden" onClick={toggleMenu}>
-          {showMenu ? <X width="w-4" /> : <Menu width="w-4" />}
+          <X
+            data-visible={showMenu}
+            className="data-[visible=false]:hidden w-4"
+          />
+          <Menu
+            data-visible={showMenu}
+            className="data-[visible=true]:hidden w-4"
+          />
         </Button>
         <h3>Navegação</h3>
       </div>
@@ -45,7 +52,7 @@ export const NavBar: FC = () => {
         <NavItem variant={isRoot ? 'secondary' : 'link'} href="/">
           Listagem
         </NavItem>
-        <NavItem variant={!isRoot ? 'secondary' : 'link'} href="register">
+        <NavItem variant={!isRoot ? 'secondary' : 'link'} href="/register">
           Cadastrar
         </NavItem>
       </div>
