@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const RootLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <html lang="pt" className={inter.className}>
-      <body className="sm:flex">{children}</body>
+      <body className="flex max-md:flex-col">{children}</body>
     </html>
   );
 };
