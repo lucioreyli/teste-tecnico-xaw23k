@@ -1,5 +1,5 @@
 'use client';
-import type { FC } from 'react';
+import { useRef, type FC } from 'react';
 import { Label } from '../ui/label';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,8 +21,12 @@ import { formatMoney } from './format-money';
 import { deleteKey, formatQuantity } from './format-quantity';
 import Link from 'next/link';
 import { useSubmit } from './use-submit';
+import { useProductsStore } from '@/store';
 
-export const Form: FC = () => {
+type Props = { productIndex?: number };
+
+export const Form: FC<Props> = ({ productIndex }) => {
+  const products = useProductsStore((state) => state.products);
   const {
     handleSubmit,
     register,
@@ -32,9 +36,11 @@ export const Form: FC = () => {
     formState: { errors },
   } = useForm<Product>({
     resolver: zodResolver(productSchema),
+    ...(typeof productIndex === 'number' && {
+      defaultValues: products[productIndex],
+    }),
   });
-  const { onSubmit } = useSubmit(undefined);
-  console.log(errors);
+  const { onSubmit } = useSubmit(productIndex);
 
   const isPerishable = watch('perishable');
   const unit = watch('unit');

@@ -5,25 +5,23 @@ import type { FC } from 'react';
 
 type Props = { table: Table<Product> };
 
-export const THeader: FC<Props> = ({ table }) => {
-  return (
-    <TableHeader>
-      {table.getHeaderGroups().map((headerGroup) => (
-        <TableRow key={headerGroup.id}>
-          {headerGroup.headers.map((header) => {
-            return (
-              <TableHead key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-              </TableHead>
-            );
-          })}
-        </TableRow>
-      ))}
-    </TableHeader>
-  );
-};
+export const THeader: FC<Props> = ({ table }) => (
+  <TableHeader>
+    {table.getHeaderGroups().map((headerGroup) => (
+      <TableRow key={headerGroup.id}>
+        {headerGroup.headers.map((header) => {
+          return (
+            <TableHead key={header.id}>
+              {header.isPlaceholder
+                ? null
+                : flexRender(
+                    header.column.columnDef.header,
+                    header.getContext(),
+                  )}
+            </TableHead>
+          );
+        })}
+      </TableRow>
+    ))}
+  </TableHeader>
+);
