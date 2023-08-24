@@ -21,7 +21,7 @@ export const NavBar: FC = () => {
   const isRoot = !pathName.includes('register');
 
   return (
-    <div className="px-6 pt-12 w-1/6 sticky top-0">
+    <div className="px-6 pt-12 w-1/6 md:sticky top-[0px] self-start">
       <span className="mb-6 flex">Navegação</span>
       <NavItem variant={isRoot ? 'secondary' : 'link'} href="/">
         Listagem

@@ -18,7 +18,7 @@ type Props = Omit<CalendarProps, 'selected' | 'onSelect'> & {
 
 export const DatePicker: FC<Props> = (props) => {
   const { id, selected } = props;
-  const date = new Date(selected ?? Date.now());
+  const date = selected && new Date(selected);
 
   return (
     <Popover>
@@ -41,12 +41,12 @@ export const DatePicker: FC<Props> = (props) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
-        {/* @ts-expect-error */}
         <Calendar
           mode="single"
           initialFocus
           {...props}
-          onSelect={(date: Date) => props.onChange(date.toISOString())}
+          selected={date instanceof Date ? date : undefined}
+          onSelect={(date: Date) => props.onChange(date?.toISOString())}
         />
       </PopoverContent>
     </Popover>

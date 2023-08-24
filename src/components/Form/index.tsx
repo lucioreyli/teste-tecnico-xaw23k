@@ -16,6 +16,11 @@ import {
   SelectValue,
 } from '../ui/select';
 import { unitInput } from './unit-input';
+import { ErrorText } from '../ui/error-text';
+import { formatMoney } from './format-money';
+import { deleteKey, formatQuantity } from './format-quantity';
+import Link from 'next/link';
+import { useSubmit } from './use-submit';
 
 export const Form: FC = () => {
   const {
@@ -23,51 +28,43 @@ export const Form: FC = () => {
     register,
     watch,
     control,
+    setValue,
     formState: { errors },
   } = useForm<Product>({
-    // @ts-expect-error
     resolver: zodResolver(productSchema),
   });
+  const { onSubmit } = useSubmit(undefined);
   console.log(errors);
 
-  const onSubmit = (res: Product) => {
-    console.log(res);
-    /**/
-  };
-
   const isPerishable = watch('perishable');
+  const unit = watch('unit');
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="py-3 flex flex-col gap-y-4 md:w-3/5"
+      className="py-3 flex flex-col gap-y-2 md:w-3/5"
     >
       <div className="grid gap-1.5">
         <Label htmlFor="name">Nome</Label>
         <Input id="name" {...register('name')} placeholder="Nome do produto" />
-        <small>{errors?.name?.message}</small>
+        <ErrorText>{errors?.name?.message}</ErrorText>
       </div>
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="price">Preço</Label>
-        <Input
-          id="price"
-          {...register('price')}
-          placeholder="Preço do produto"
-          type="number"
+        <Controller
+          control={control}
+          name="price"
+          render={({ field }) => (
+            <Input
+              id="price"
+              placeholder="Preço do produto"
+              {...field}
+              onChange={(val) => field.onChange(formatMoney(val.target.value))}
+            />
+          )}
         />
-        <small>{errors?.price?.message}</small>
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="quantity">Quantidade (apenas número)*</Label>
-        <Input
-          id="quantity"
-          {...register('quantity')}
-          placeholder="Preço do produto"
-          type="number"
-        />
-        <small>{errors?.quantity?.message}</small>
+        <ErrorText>{errors?.price?.message}</ErrorText>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -76,9 +73,15 @@ export const Form: FC = () => {
           control={control}
           name="unit"
           render={({ field }) => (
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <Select
+              onValueChange={(...e) => {
+                field.onChange(...e);
+                setValue('quantity', '');
+              }}
+              defaultValue={field.value}
+            >
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Selecione a unidade" />
+                <SelectValue placeholder="Selecione a unidade" id="unit" />
               </SelectTrigger>
               <SelectContent>
                 {unitInput.map<JSX.Element>((field) => (
@@ -90,7 +93,32 @@ export const Form: FC = () => {
             </Select>
           )}
         />
-        <small>{errors?.unit?.message}</small>
+        <ErrorText>{errors?.unit?.message}</ErrorText>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="quantity">Quantidade (apenas número)</Label>
+        <Controller
+          control={control}
+          name="quantity"
+          render={({ field }) => (
+            <Input
+              id="quantity"
+              placeholder="Quantidade"
+              disabled={!unit}
+              {...field}
+              onChange={({ target }) =>
+                field.onChange(formatQuantity(unit, target.value))
+              }
+              onKeyDownCapture={deleteKey({
+                type: unit,
+                setValue: field.onChange,
+                value: field.value,
+              })}
+            />
+          )}
+        />
+        <ErrorText>{errors?.quantity?.message}</ErrorText>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -106,7 +134,7 @@ export const Form: FC = () => {
             />
           )}
         />
-        <small>{errors?.fabricationDate?.message}</small>
+        <ErrorText>{errors?.fabricationDate?.message}</ErrorText>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -122,7 +150,7 @@ export const Form: FC = () => {
             />
           )}
         />
-        <small>{errors?.perishable?.message}</small>
+        <ErrorText>{errors?.perishable?.message}</ErrorText>
       </div>
 
       {isPerishable && (
@@ -139,11 +167,17 @@ export const Form: FC = () => {
               />
             )}
           />
-          <p>hoje eu fico até mais tarde</p>
-          <p>{errors?.validationDate?.message}</p>
+          <ErrorText>{errors?.validationDate?.message}</ErrorText>
         </div>
       )}
-      <Button type="submit">Salvar</Button>
+      <div className="flex w-full gap-4">
+        <Button asChild className="flex-1" variant="outline" type="submit">
+          <Link href="/">Cancelar</Link>
+        </Button>
+        <Button className="flex-1" type="submit">
+          Salvar
+        </Button>
+      </div>
     </form>
   );
 };

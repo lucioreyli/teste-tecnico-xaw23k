@@ -1,7 +1,5 @@
-import type { FC, PropsWithChildren } from 'react';
+import type { ComponentProps, FC, PropsWithChildren } from 'react';
 
-export const TextCell: FC<PropsWithChildren> = ({ children }) => (
-  <div className="flex space-x-2">
-    <span className="capitalize">{children}</span>
-  </div>
-);
+type Props = PropsWithChildren<ComponentProps<'div'>>;
+
+export const TextCell: FC<Props> = ({ children }) => <p>{children}</p>;
