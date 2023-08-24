@@ -9,7 +9,6 @@ export const useSubmit = (indexToEdit: number | undefined) => {
     state.setProducts,
   ]);
   const router = useRouter();
-  console.log(typeof indexToEdit === 'number' && !products[indexToEdit]);
 
   if (typeof indexToEdit === 'number' && !products[indexToEdit]) {
     router.push('/');
