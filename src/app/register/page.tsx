@@ -1,5 +1,5 @@
 import { Form } from '@/components/Form';
-import { NextPage } from 'next';
+import type { NextPage } from 'next';
 
 const Register: NextPage = () => <Form />;
 

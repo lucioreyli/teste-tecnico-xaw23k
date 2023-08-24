@@ -1,6 +1,6 @@
 'use client';
 import { useState, type FC, type PropsWithChildren } from 'react';
-import { Button, ButtonProps } from '../ui/button';
+import { Button, type ButtonProps } from '../ui/button';
 import Link, { type LinkProps } from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -25,14 +25,11 @@ export const NavBar: FC = () => {
   const isRoot = !pathName.includes('register');
 
   return (
-    <div
+    <nav
       data-visible={showMenu}
       className={cn(
-        'px-6 pt-12 md:w-1/6 md:sticky md:top-[0px] md:self-start',
-        'flex flex-col gap-5 bg-white dark:bg-black z-50',
-        'max-md:data-[visible=true]:w-full',
-        'max-md:data-[visible=true]:absolute',
-        'max-md:data-[visible=true]:h-[100dvh]',
+        'px-6 pt-12 md:w-1/6 md:sticky md:top-0 md:self-start flex flex-col gap-5 bg-white dark:bg-black z-50',
+        'max-md:data-[visible=true]:w-full max-md:data-[visible=true]:absolute max-md:data-[visible=true]:h-[100dvh]',
       )}
     >
       <div className="flex w-fit mb-6 items-center gap-4">
@@ -52,6 +49,6 @@ export const NavBar: FC = () => {
           Cadastrar
         </NavItem>
       </div>
-    </div>
+    </nav>
   );
 };
