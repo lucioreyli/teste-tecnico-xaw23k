@@ -19,7 +19,7 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: 'quantity',
     header: 'Quantidade',
-    cell: ({ row }) => row.getValue('quantity'),
+    cell: ({ row }) => <TextCell>{row.getValue('quantity')}</TextCell>,
   },
   {
     accessorKey: 'price',
@@ -54,8 +54,6 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: 'actions',
     header: 'Ações',
-    cell: ({ row }) => {
-      return <ActionsProduct index={row.index} />;
-    },
+    cell: ({ row }) => <ActionsProduct index={row.index} />,
   },
 ];
