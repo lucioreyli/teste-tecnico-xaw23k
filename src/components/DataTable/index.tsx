@@ -7,12 +7,14 @@ import { useProductsStore } from '@/store';
 import { THeader } from './THeader';
 import { TBody } from './TBody';
 
+const coreRowModel = getCoreRowModel();
+
 export const DataTable: FC = () => {
-  const data = useProductsStore.getState().products;
+  const data = useProductsStore((state) => state.products);
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
+    getCoreRowModel: coreRowModel,
   });
 
   return (

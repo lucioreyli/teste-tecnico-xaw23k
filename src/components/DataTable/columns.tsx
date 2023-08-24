@@ -3,9 +3,7 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { Checkbox } from '../ui/checkbox';
 import { TextCell } from './TextCell';
 import dayjs from 'dayjs';
-import { Button } from '../ui/button';
-import Link from 'next/link';
-import { Pen, Trash } from 'lucide-react';
+import { ActionsProduct } from './ActionsProduct';
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -57,26 +55,7 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: 'actions',
     header: 'Ações',
     cell: ({ row }) => {
-      return (
-        <div className="flex gap-2">
-          <Button
-            onClick={() => {
-              console.log(row.index);
-            }}
-            variant="destructive"
-          >
-            <Trash className="w-4 mr-2" />
-            Excluir
-          </Button>
-
-          <Button variant="secondary" asChild>
-            <Link href={`/register/${row.index}`}>
-              <Pen className="w-4 mr-2" />
-              Editar
-            </Link>
-          </Button>
-        </div>
-      );
+      return <ActionsProduct index={row.index} />;
     },
   },
 ];

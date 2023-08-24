@@ -4,14 +4,14 @@ import { useRouter } from 'next/navigation';
 import { produce } from 'immer';
 
 export const useSubmit = (indexToEdit: number | undefined) => {
-  const { products, setProducts } = useProductsStore((state) => state);
+  const [products, setProducts] = useProductsStore((state) => [
+    state.products,
+    state.setProducts,
+  ]);
   const router = useRouter();
+  console.log(typeof indexToEdit === 'number' && !products[indexToEdit]);
 
-  if (
-    products.length &&
-    typeof indexToEdit === 'number' &&
-    !products[indexToEdit]
-  ) {
+  if (typeof indexToEdit === 'number' && !products[indexToEdit]) {
     router.push('/');
   }
 
