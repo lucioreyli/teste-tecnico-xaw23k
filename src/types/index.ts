@@ -79,20 +79,26 @@ export const productSchema = z
       if (!data.validationDate) {
         return false;
       }
+      const validationDateTimestamp = new Date(data.validationDate).getTime();
+      const fabricationDateTimestamp = new Date(data.fabricationDate).getTime();
+      return validationDateTimestamp >= fabricationDateTimestamp;
+    },
+    { message: 'Data de validade inválida', path: ['validationDate'] },
+  )
+  .refine(
+    (data) => {
+      if (!data.perishable) {
+        return true;
+      }
+      if (!data.validationDate) {
+        return false;
+      }
       const [todayWithoutTime] = new Date().toISOString().split('T');
       const todayTimestamp = new Date(todayWithoutTime).getTime();
       const validationDateTimestamp = new Date(data.validationDate).getTime();
-      const fabricationDateTimestamp = new Date(data.fabricationDate).getTime();
-      console.log(
-        todayTimestamp <= validationDateTimestamp,
-        validationDateTimestamp >= fabricationDateTimestamp,
-      );
-      return (
-        todayTimestamp <= validationDateTimestamp &&
-        validationDateTimestamp >= fabricationDateTimestamp
-      );
+      return todayTimestamp <= validationDateTimestamp;
     },
-    { message: 'Data de validade inválida', path: ['validationDate'] },
+    { message: 'Data de validade vencida', path: ['validationDate'] },
   );
 
 export type Product = z.infer<typeof productSchema>;
